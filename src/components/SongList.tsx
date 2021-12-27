@@ -1,20 +1,5 @@
-import {
-  IonButton,
-  IonContent,
-  IonIcon,
-  IonItem,
-  IonList,
-  IonPage,
-  IonRange,
-} from "@ionic/react";
-import {
-  pauseSharp,
-  playSharp,
-  playSkipBackSharp,
-  playSkipForwardSharp,
-} from "ionicons/icons";
-import { useEffect, useRef, useState } from "react";
-import { calculateTime } from "../utils/calculateTime";
+import { IonButton, IonContent, IonIcon, IonItem, IonList, IonPage } from "@ionic/react";
+import { pauseSharp, playSharp } from "ionicons/icons";
 import "./SongList.css";
 
 interface SongListProps {}
@@ -41,101 +26,13 @@ const songList = [
 ];
 
 const SongList: React.FC<SongListProps> = () => {
-  const audioRef = useRef<HTMLAudioElement>(null);
-  const audioProgressRef = useRef<any>(null);
-  const audioVolumeRef = useRef<any>(null);
-  const animationRef = useRef<number>();
-
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [songPath, setSongPath] = useState<string>();
-  const [duration, setDuration] = useState(0);
-  const [currentTime, setCurrentTime] = useState(0);
-
-  function onLoadedMetadata() {
-    if (
-      audioRef.current &&
-      audioProgressRef.current &&
-      audioVolumeRef.current
-    ) {
-      const seconds = Math.floor(audioRef.current.duration);
-      if (seconds) setDuration(seconds);
-      audioProgressRef.current.max = seconds;
-      audioRef.current.volume = audioVolumeRef.current.value;
-    }
-  }
-
-  function updateCurrentTime() {
-    if (audioProgressRef.current)
-      setCurrentTime(audioProgressRef.current.value);
-  }
-
-  function pause() {
-    if (audioRef.current) audioRef.current.pause();
-    if (animationRef.current) cancelAnimationFrame(animationRef.current);
-  }
-
-  function whilePlaying() {
-    if (audioRef.current && audioProgressRef.current) {
-      audioProgressRef.current.value = Math.floor(audioRef.current.currentTime);
-      audioProgressRef.current.style.setProperty(
-        "--seek-before-width",
-        `${(audioProgressRef.current.value / duration) * 100}%`
-      );
-      updateCurrentTime();
-
-      // if(audioProgressRef.current.value === duration) {
-      //   //the song has ended go to the next song
-      //   return
-
-      animationRef.current = requestAnimationFrame(whilePlaying);
-    }
-  }
-
-  function changeAudioToPlayHead() {
-    if (audioRef.current && audioProgressRef.current) {
-      audioRef.current.currentTime = audioProgressRef.current.value;
-      setCurrentTime(audioProgressRef.current.value);
-      audioProgressRef.current.style.setProperty(
-        "--seek-before-width",
-        `${(audioProgressRef.current.value / duration) * 100}%`
-      );
-    }
-  }
-
-  function changeAudioVolume() {
-    if (audioRef.current && audioVolumeRef.current) {
-      audioRef.current.volume = audioVolumeRef.current.value;
-    }
-  }
-
-  function play() {
-    if (audioRef.current) audioRef.current.play();
-    animationRef.current = requestAnimationFrame(whilePlaying);
-  }
-
-  function togglePlaying() {
-    const prevState = isPlaying;
-    setIsPlaying(!prevState);
-    if (!prevState) {
-      play();
-    } else {
-      pause();
-    }
-  }
-
-  useEffect(() => {
-    if (songPath && !isPlaying) {
-      togglePlaying();
-    }
-  }, [songPath]);
-
   return (
     <IonPage>
       <div className="wrapper">
         <IonContent>
-          Playlist
+          Playlist ({songList.length})
           <IonList>
-            {songList.map((song) => (
+            {/* {songList.map((song) => (
               <IonItem key={`song--${song.title}`} color="light">
                 {song.title}
                 <IonButton
@@ -151,68 +48,12 @@ const SongList: React.FC<SongListProps> = () => {
                   }}
                   slot="start"
                 >
-                  {isPlaying && songPath === song.path ? (
-                    <IonIcon icon={pauseSharp} />
-                  ) : (
-                    <IonIcon icon={playSharp} />
-                  )}
+                  {isPlaying && songPath === song.path ? <IonIcon icon={pauseSharp} /> : <IonIcon icon={playSharp} />}
                 </IonButton>
               </IonItem>
-            ))}
+            ))} */}
           </IonList>
-          {/* current time */}
-          <div className="flex jc">
-            <IonButton>
-              <IonIcon icon={playSkipBackSharp} />
-            </IonButton>
-            <IonButton
-              onClick={() => {
-                togglePlaying();
-              }}
-            >
-              {isPlaying ? (
-                <IonIcon icon={pauseSharp} />
-              ) : (
-                <IonIcon icon={playSharp} />
-              )}
-            </IonButton>
-
-            <IonButton>
-              <IonIcon icon={playSkipForwardSharp} />
-            </IonButton>
-          </div>
-          <div className="flex">
-            <span>{calculateTime(currentTime)}</span>
-            <input
-              style={{ pointerEvents: songPath ? "all" : "none" }}
-              className="audioProgressbar"
-              type="range"
-              ref={audioProgressRef}
-              onInput={changeAudioToPlayHead}
-              step={1}
-              min={0}
-              defaultValue={0}
-            />
-            {/* total time*/}
-            <span>{calculateTime(duration)}</span>
-            {/* volume changer */}
-            <input
-              className="audioVolumebar"
-              type="range"
-              ref={audioVolumeRef}
-              onChange={changeAudioVolume}
-              step={0.01}
-              min={0}
-              max={1}
-              defaultValue={0.2}
-            />
-          </div>
         </IonContent>
-        <audio
-          ref={audioRef}
-          src={songPath ?? songList[0].path}
-          onLoadedMetadata={onLoadedMetadata}
-        ></audio>
       </div>
     </IonPage>
   );

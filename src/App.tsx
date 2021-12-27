@@ -4,6 +4,7 @@ import {
   IonButton,
   IonButtons,
   IonContent,
+  IonFooter,
   IonHeader,
   IonIcon,
   IonItem,
@@ -42,44 +43,50 @@ import "@ionic/react/css/display.css";
 
 /* Theme variables */
 import "./theme/variables.css";
+
+/* My Stuffs */
 import SongList from "./components/SongList";
+import Player from "./components/Player";
+
+import "./App.css";
 
 setupIonicReact();
 
 const App: React.FC = () => (
   <IonApp>
-    <SongList />
+    <div className="App__wrapper">
+      <div className="App__main">
+        <IonSplitPane when="sm" contentId="main-content">
+          <IonMenu contentId="main-content">
+            <IonContent>
+              <IonList>
+                <IonMenuToggle autoHide={false}>
+                  <IonItem button>
+                    <IonIcon slot="start" icon={home}></IonIcon>
+                    <IonLabel>Home</IonLabel>
+                  </IonItem>
+                </IonMenuToggle>
+              </IonList>
+            </IonContent>
+          </IonMenu>
+
+          <div className="ion-page" id="main-content">
+            <IonContent>
+              <h1>Main Content</h1>
+            </IonContent>
+          </div>
+        </IonSplitPane>
+      </div>
+      <div className="App__footer">
+        <Player
+          artwork="./assets/images/album-cover.jpg"
+          songTitle="Chikyu-u"
+          artists={["R.M"]}
+          audioPath="./assets/audio/02 - Chikyu-u.mp3"
+        />
+      </div>
+    </div>
   </IonApp>
 );
 
 export default App;
-
-// <IonSplitPane when="sm" contentId="main-content">
-//       <IonMenu contentId="main-content">
-//         <IonHeader>
-//           <IonToolbar color="secondary">
-//             <IonTitle>Menu</IonTitle>
-//           </IonToolbar>
-//         </IonHeader>
-//         <IonContent>
-//           <IonList></IonList>
-//         </IonContent>
-//       </IonMenu>
-//       <div className="ion-page" id="main-content">
-//         <IonHeader>
-//           <IonToolbar>
-//             <IonButtons slot="start">
-//               <IonMenuToggle>
-//                 <IonButton>
-//                   <IonIcon slot="icon-only" icon={menu}></IonIcon>
-//                 </IonButton>
-//               </IonMenuToggle>
-//             </IonButtons>
-//             <IonTitle>Header</IonTitle>
-//           </IonToolbar>
-//         </IonHeader>
-//         <IonContent className="ion-padding">
-//           <h1>Main Content</h1>
-//         </IonContent>
-//       </div>
-//     </IonSplitPane>
