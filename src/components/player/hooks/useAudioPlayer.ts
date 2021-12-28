@@ -6,7 +6,6 @@ export function useAudioPlayer(audioRef: any, audioProgressRef: any, audioVolume
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
 
-  //keep track of the animation in miliseconds for animation
   const animationRef = useRef<number>();
 
   function onLoadedMetadata() {
@@ -14,6 +13,7 @@ export function useAudioPlayer(audioRef: any, audioProgressRef: any, audioVolume
       const seconds = Math.floor(audioRef.current.duration);
       if (seconds) setDuration(seconds);
       audioProgressRef.current.max = seconds;
+      audioRef.current.value = 0;
       audioRef.current.volume = audioVolumeRef.current.value;
     }
   }
@@ -32,9 +32,9 @@ export function useAudioPlayer(audioRef: any, audioProgressRef: any, audioVolume
       audioProgressRef.current.value = Math.floor(audioRef.current.currentTime);
       audioProgressRef.current.style.setProperty("--seek-before-width", `${(audioProgressRef.current.value / duration) * 100}%`);
       updateCurrentTime();
-
       // the song has ended go to the next song
       // if (audioProgressRef.current.value === duration) {
+
       //   return;
       // }
       animationRef.current = requestAnimationFrame(whilePlaying);

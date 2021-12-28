@@ -1,14 +1,16 @@
 import { IonButton, IonIcon } from "@ionic/react";
 import { pauseSharp, playSharp, playSkipBackSharp, playSkipForwardSharp } from "ionicons/icons";
 import { useRef } from "react";
-import { useAudioPlayer } from "../hooks/useAudioPlayer";
-import { calculateTime } from "../utils/calculateTime";
+import { useAudioPlayer } from "./hooks/useAudioPlayer";
+import { calculateTime } from "../../utils/calculateTime";
 import "./Player.css";
+
 interface PlayerProps {
-  artwork: string;
-  songTitle: string;
-  artists: string[];
-  audioPath: string;
+  id: string | undefined;
+  artwork: string | undefined;
+  songTitle: string | undefined;
+  artists: string[] | undefined;
+  audioPath: string | undefined;
 }
 
 const Player: React.FC<PlayerProps> = ({ artwork, songTitle, artists, audioPath }) => {
@@ -25,13 +27,16 @@ const Player: React.FC<PlayerProps> = ({ artwork, songTitle, artists, audioPath 
   return (
     <div className="Player__wrapper">
       <div className="Player__left">
-        <img className="Song__artwork" width={56} height={56} src={artwork} alt="song's album artwork" />
+        {artwork ? (
+          <img className="Song__artwork" width={56} height={56} src={artwork} alt="song's album artwork" />
+        ) : (
+          <div style={{ width: "56px", height: "56px", background: "gray" }}></div>
+        )}
+
         <div className="Song__info">
           <span className="Song__title">{songTitle}</span>
           <span className="Song__artists">
-            {artists.map((artist: string) => (
-              <span>{artist}</span>
-            ))}
+            {artists ? artists.map((artist: string) => <span key={`artist--${artist}`}>{artist}</span>) : ""}
           </span>
         </div>
       </div>
@@ -52,7 +57,7 @@ const Player: React.FC<PlayerProps> = ({ artwork, songTitle, artists, audioPath 
           </IonButton>
         </div>
         <div className="Player__progress">
-          <span>{calculateTime(currentTime)}</span>
+          <span className="Progress__currentTime">{calculateTime(currentTime)}</span>
           <input
             className="Player__audioProgressbar"
             type="range"
@@ -63,7 +68,7 @@ const Player: React.FC<PlayerProps> = ({ artwork, songTitle, artists, audioPath 
             defaultValue={0}
           />
 
-          <span>{calculateTime(duration)}</span>
+          <span className="Progress__duration">{calculateTime(duration)}</span>
         </div>
       </div>
       <div className="Player__right">

@@ -43,8 +43,20 @@
   justify-content: center;
 }
 
+.Player__progress {
+  display: flex;
+  align-items: center;
+}
+
 .Player__audioProgressbar {
   width: 100%;
+}
+
+.Progress__currentTime,
+.Progress__duration {
+  color: white;
+  font-size: 11px;
+  padding: 0 4px;
 }
 
 .Player__right {
