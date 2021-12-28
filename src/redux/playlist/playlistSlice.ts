@@ -1,21 +1,7 @@
 import { createSlice, PayloadAction, nanoid } from "@reduxjs/toolkit";
 import trackList from "../../data/tracks";
 import { RootState } from "../app/store";
-
-type Track = {
-  id: string;
-  title: string;
-  artwork: string;
-  artists: string[];
-  path: string;
-};
-
-type Playlist = {
-  id: string;
-  title: string;
-  description: string;
-  artworkPath?: string;
-};
+import { Playlist, Track } from "./types";
 
 export interface PlaylistState {
   allPlaylists: Playlist[];

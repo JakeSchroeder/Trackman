@@ -55,43 +55,12 @@ import { useAppSelector } from "./redux/app/hooks";
 import { selectAllPlaylists } from "./redux/playlist/playlistSlice";
 import Playlist from "./pages/playlist/Playlist";
 import Home from "./pages/home/Home";
+import { Track } from "./redux/playlist/types";
 
 setupIonicReact();
 
-const allSongs = [
-  {
-    id: "1",
-    artwork: "./assets/images/album-cover.jpg",
-    title: "Chikyu-u 002",
-    artists: ["R.M"],
-    path: "./assets/audio/02 - Chikyu-u.mp3",
-  },
-  {
-    id: "2",
-    artwork: "./assets/images/album-cover.jpg",
-    title: "Untitled 02",
-    artists: ["Unknown Artist"],
-    path: "./assets/audio/02 - Untitled 02.mp3",
-  },
-  {
-    id: "3",
-    artwork: "./assets/images/album-cover.jpg",
-    title: "Extraction (Extended Mix)",
-    artists: ["Dosem"],
-    path: "./assets/audio/02 - Extraction (Extended Mix).mp3",
-  },
-];
-
-interface ISong {
-  id: string;
-  artwork: string;
-  title: string;
-  artists: string[];
-  path: string;
-}
-
 const App: React.FC = () => {
-  const [selectedSong, setSelectedSong] = useState<ISong>();
+  const [selectedSong, setSelectedSong] = useState<Track>();
   const allPlaylists = useAppSelector(selectAllPlaylists);
 
   return (
@@ -120,11 +89,6 @@ const App: React.FC = () => {
                 </IonContent>
               </IonMenu>
               <IonRouterOutlet id="main-content" animated={false}>
-                {/*
-                We use IonRoute here to keep the tabs state intact,
-                which makes transitions between tabs and non tab pages smooth
-                */}
-                {/* <Route path="/tabs" render={() => <MainTabs />} /> */}
                 <Route path="/" component={Home} exact />
                 <Route path="/playlist/:id" component={Playlist} exact />
               </IonRouterOutlet>
