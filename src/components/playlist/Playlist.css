@@ -1,0 +1,32 @@
+.Playlist__itemwrap {
+  --inner-padding-end: 0;
+  --inner-padding-start: 0;
+  --padding-start: 0;
+  --padding-end: 0;
+}
+.Playlist__item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 16px 0;
+}
+
+.Playlist__item--selected {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.Playlist__number {
+  font-size: 16px;
+  padding: 0 24px;
+}
+
+.Playlist__title {
+  display: flex;
+  flex-direction: column;
+}
+.Playlist__title {
+  font-size: 14px;
+}
+.Playlist__artist {
+  font-size: 11px;
+}

@@ -52,59 +52,25 @@ import Player from "./components/player/Player";
 import "./App.css";
 import { useState } from "react";
 import { useAppSelector } from "./redux/app/hooks";
-import { selectAllPlaylists } from "./redux/playlist/playlistSlice";
-import Playlist from "./pages/playlist/Playlist";
-import Home from "./pages/home/Home";
+// import { selectAllPlaylists } from "./redux/playlist/playlistSlice";
 import { Track } from "./redux/playlist/types";
+import Playlist from "./components/playlist/Playlist";
 
 setupIonicReact();
 
 const App: React.FC = () => {
-  const [selectedSong, setSelectedSong] = useState<Track>();
-  const allPlaylists = useAppSelector(selectAllPlaylists);
-
   return (
     <IonApp>
-      <IonReactRouter>
-        <div className="App__wrapper">
+      <div className="App__wrapper">
+        <div className="App__inner">
           <div className="App__main">
-            <IonSplitPane when="sm" contentId="main-content">
-              <IonMenu contentId="main-content">
-                <IonList>
-                  <IonItem button routerLink="/">
-                    <IonIcon slot="start" icon={home}></IonIcon>
-                    <IonLabel>Home</IonLabel>
-                  </IonItem>
-                </IonList>
-                <IonContent>
-                  <IonList>
-                    {allPlaylists
-                      ? allPlaylists.map((playlist) => (
-                          <IonItem routerLink={`/playlist/${playlist.id}`} key={playlist.title}>
-                            {playlist.title}
-                          </IonItem>
-                        ))
-                      : "None"}
-                  </IonList>
-                </IonContent>
-              </IonMenu>
-              <IonRouterOutlet id="main-content" animated={false}>
-                <Route path="/" component={Home} exact />
-                <Route path="/playlist/:id" component={Playlist} exact />
-              </IonRouterOutlet>
-            </IonSplitPane>
-          </div>
-          <div className="App__footer">
-            <Player
-              id={selectedSong?.id}
-              artwork={selectedSong?.artwork}
-              songTitle={selectedSong?.title}
-              artists={selectedSong?.artists}
-              audioPath={selectedSong?.path}
-            />
+            <Playlist />
           </div>
         </div>
-      </IonReactRouter>
+        <div className="App__player">
+          <Player />
+        </div>
+      </div>
     </IonApp>
   );
 };

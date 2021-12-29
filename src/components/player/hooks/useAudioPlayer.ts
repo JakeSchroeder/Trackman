@@ -75,6 +75,8 @@ export function useAudioPlayer(audioRef: any, audioProgressRef: any, audioVolume
     currentTime,
     duration,
     isPlaying,
+    setIsPlaying,
+    play,
     onLoadedMetadata,
     togglePlaying,
     changeAudioVolume,

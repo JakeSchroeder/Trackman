@@ -1,8 +1,8 @@
 .Player__wrapper {
   width: 100%;
   height: 90px;
-  background-color: black;
-  border-top: 1px solid rgba(255, 255, 255, 0.33);
+  background-color: #111;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -41,6 +41,30 @@
 .Player__controls {
   display: flex;
   justify-content: center;
+  margin-bottom: 6px;
+}
+
+.Player__back,
+.Player__forward {
+  --background: transparent !important;
+  --background-hover: transparent !important;
+  --color: gray;
+  --color-hover: gray;
+}
+
+.Player__toggle {
+  --border-radius: 99px;
+}
+
+ion-icon {
+  font-size: 16px;
+}
+
+.Player__toggle::part(native) {
+  border-radius: 50%;
+  padding: 0;
+  height: 32px;
+  width: 32px;
 }
 
 .Player__progress {
@@ -56,7 +80,8 @@
 .Progress__duration {
   color: white;
   font-size: 11px;
-  padding: 0 4px;
+  padding: 0 8px;
+  color: gray;
 }
 
 .Player__right {
@@ -64,4 +89,125 @@
   width: 30%;
   display: flex;
   justify-content: flex-end;
+}
+
+.Player__volume {
+  display: flex;
+  font-size: 16px;
+}
+
+.Volume__icon {
+  font-size: 24px;
+  margin-right: 8px;
+}
+
+/* all range styles */
+input[type="range"] {
+  -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+  width: 100%; /* Specific width is required for Firefox. */
+  background: transparent; /* Otherwise white in Chrome */
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+}
+
+input[type="range"]:focus {
+  outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
+}
+
+input[type="range"]::-ms-track {
+  width: 100%;
+  cursor: pointer;
+
+  /* Hides the slider so custom styles can be added */
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+
+/* thumb styles */
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 12px;
+  width: 12px;
+  border-radius: 99px;
+  background: #ffffff;
+  cursor: pointer;
+  margin-top: -4px; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
+}
+
+/* All the same stuff for Firefox */
+input[type="range"]::-moz-range-thumb {
+  height: 12px;
+  width: 12px;
+  border-radius: 99px;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+/* All the same stuff for IE */
+input[type="range"]::-ms-thumb {
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  border: 1px solid #000000;
+  height: 12px;
+  width: 12px;
+  border-radius: 99px;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+/* slider styles */
+
+input[type="range"]::-webkit-progress-value {
+  background: yellow;
+}
+
+input[type="range"]::-moz-range-progress {
+  background: yellow;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 4px;
+  cursor: pointer;
+  background: #535353;
+  border-radius: 99px;
+}
+
+input[type="range"]:focus::-webkit-slider-runnable-track {
+  background: #535353;
+}
+
+input[type="range"]::-moz-range-track {
+  width: 100%;
+  height: 4px;
+  cursor: pointer;
+  background: #535353;
+  border-radius: 99px;
+}
+
+input[type="range"]::-ms-track {
+  width: 100%;
+  height: 99px;
+  cursor: pointer;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+input[type="range"]::-ms-fill-lower {
+  background: #535353;
+  border-radius: 99px;
+}
+input[type="range"]:focus::-ms-fill-lower {
+  background: #535353;
+}
+input[type="range"]::-ms-fill-upper {
+  background: #535353;
+
+  border-radius: 99px;
+}
+input[type="range"]:focus::-ms-fill-upper {
+  background: #535353;
 }
