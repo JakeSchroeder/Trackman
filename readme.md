@@ -15,6 +15,7 @@
 
 - Express
 - Node
+- GraphQL
 - Typescript
 
 ### Database
