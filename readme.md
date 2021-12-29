@@ -4,14 +4,14 @@
 
 `For Web, Mobile, and Desktop`
 
-### Frontend
+### Frontend (Client)
 
 - Ionic (React)
 - Capacitor
 - Electron
 - Typescript
 
-### Backend
+### Backend (Server)
 
 - Express
 - Node
