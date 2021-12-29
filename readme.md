@@ -44,7 +44,7 @@ Contributors:
 - [ ] User accounts
 - [ ] Drag & Drop Upload
 - [ ] S3 Storage
-- [ ] Playback
+- [x] Playback
 - [ ] Playlists
 - [ ] Search by Artists, songs, etc
 - [ ] Local file support
