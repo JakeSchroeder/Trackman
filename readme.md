@@ -1,6 +1,6 @@
 # Trackman
 
-## Personal Audio Storage Solution
+## Premium Personal Audio Storage Solution
 
 `For Web, Mobile, and Desktop`
 
@@ -23,7 +23,6 @@
 
 ### Infastructure
 
-- Netlify
 - Digital Ocean
 - AWS
 
