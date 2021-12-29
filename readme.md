@@ -19,12 +19,12 @@
 
 ### Database
 
-- MongoDB
+- PostgreSQL
 
 ### Infastructure
 
 - Digital Ocean
-- AWS
+- S3
 
 ---
 
@@ -42,7 +42,7 @@ Contributors:
 ## TODOs
 - [ ] User accounts
 - [ ] Drag & Drop Upload
-- [ ] S3 Storage
+- [ ] Cloud Storage
 - [x] Playback
 - [ ] Playlists
 - [ ] Search by Artists, songs, etc
