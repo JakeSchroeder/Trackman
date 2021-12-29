@@ -1,6 +1,6 @@
 # Trackman
 
-## Premium Personal Audio Storage Solution
+## Premium Audio Storage
 
 `For Web, Mobile, and Desktop`
 
