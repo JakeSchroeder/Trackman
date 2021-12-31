@@ -15,16 +15,17 @@
 
 - Express
 - Node
-- GraphQL
+- TRPC
 - Typescript
 
 ### Database
 
-- PostgreSQL
+- MySQL
 
 ### Infastructure
 
-- Digital Ocean
+- Vercel
+- PlanetScale
 - S3
 
 ---
@@ -41,6 +42,7 @@ Contributors:
 </table>
 
 ## TODOs
+
 - [ ] User accounts
 - [ ] Drag & Drop Upload
 - [ ] Cloud Storage

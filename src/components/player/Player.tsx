@@ -4,8 +4,11 @@ import { useEffect, useRef } from "react";
 import { useAudioPlayer } from "./hooks/useAudioPlayer";
 import { calculateTime } from "../../utils/calculateTime";
 import "./Player.css";
-import { useAppSelector } from "../../redux/app/hooks";
-import { selectSelectedTrack } from "../../redux/playlist/playlistSlice";
+import { useAppDispatch, useAppSelector } from "../../redux/app/hooks";
+import { playNextTrack, playPrevTrack, selectSelectedTrack } from "../../redux/playlist/playlistSlice";
+const MP3Tag = require("mp3tag.js");
+
+console.log(MP3Tag);
 
 interface PlayerProps {
   // id: string | undefined;
@@ -19,7 +22,7 @@ const Player: React.FC<PlayerProps> = () => {
   const audioRef = useRef<any>(null);
   const audioProgressRef = useRef<any>(null);
   const audioVolumeRef = useRef<any>(null);
-
+  const dispatch = useAppDispatch();
   const selectedSong = useAppSelector(selectSelectedTrack);
 
   const {
@@ -58,8 +61,14 @@ const Player: React.FC<PlayerProps> = () => {
       </div>
       <div className="Player__center">
         <div className="Player__controls">
-          <IonButton className="Player__back" fill="clear">
-            <IonIcon icon={playSkipBackSharp} />
+          <IonButton
+            className="Player__back"
+            fill="clear"
+            onClick={() => {
+              dispatch(playPrevTrack());
+            }}
+          >
+            <IonIcon slot="icon-only" icon={playSkipBackSharp} />
           </IonButton>
           <IonButton
             className="Player__toggle"
@@ -75,17 +84,23 @@ const Player: React.FC<PlayerProps> = () => {
               <IonIcon slot="icon-only" icon={playSharp} />
             )}
           </IonButton>
-          <IonButton className="Player__forward" fill="clear">
-            <IonIcon icon={playSkipForwardSharp} />
+          <IonButton
+            className="Player__forward"
+            fill="clear"
+            onClick={() => {
+              dispatch(playNextTrack());
+            }}
+          >
+            <IonIcon slot="icon-only" icon={playSkipForwardSharp} />
           </IonButton>
         </div>
         <div className="Player__progress">
           <span className="Progress__currentTime">{calculateTime(currentTime)}</span>
           <input
-            className="Player__audioProgressbar"
+            className="Player__Slider"
             type="range"
             ref={audioProgressRef}
-            onInput={changeAudioToPlayHead}
+            onChange={changeAudioToPlayHead}
             step={1}
             min={0}
             defaultValue={0}
@@ -98,7 +113,7 @@ const Player: React.FC<PlayerProps> = () => {
         <div className="Player__volume">
           <IonIcon className="Volume__icon" color="light" icon={volumeMediumOutline} />
           <input
-            className="Volume__slider"
+            className="Player__Slider Player__Slider--volume"
             type="range"
             ref={audioVolumeRef}
             onChange={changeAudioVolume}
@@ -109,7 +124,14 @@ const Player: React.FC<PlayerProps> = () => {
           />
         </div>
       </div>
-      <audio ref={audioRef} src={selectedSong.path} onLoadedMetadata={onLoadedMetadata}></audio>
+      <audio
+        ref={audioRef}
+        src={selectedSong.path}
+        onLoadedMetadata={onLoadedMetadata}
+        onEnded={() => {
+          dispatch(playNextTrack());
+        }}
+      ></audio>
     </div>
   );
 };

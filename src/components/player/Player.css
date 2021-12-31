@@ -41,7 +41,9 @@
 .Player__controls {
   display: flex;
   justify-content: center;
-  margin-bottom: 6px;
+  align-items: center;
+  margin-bottom: 12px;
+  height: 32px;
 }
 
 .Player__back,
@@ -49,11 +51,24 @@
   --background: transparent !important;
   --background-hover: transparent !important;
   --color: gray;
-  --color-hover: gray;
+  --color-hover: white;
+  width: 32px;
+  height: 32px;
+  margin: 0 8px;
+}
+
+.Player__back::part(native),
+.Player__forward::part(native) {
+  padding: 0;
+  width: 32px;
+  height: 32px !important;
+  margin: 0;
 }
 
 .Player__toggle {
   --border-radius: 99px;
+  margin: 0;
+  height: 32px;
 }
 
 ion-icon {
@@ -94,120 +109,101 @@ ion-icon {
 .Player__volume {
   display: flex;
   font-size: 16px;
+  align-items: center;
 }
 
 .Volume__icon {
-  font-size: 24px;
+  font-size: 20px;
   margin-right: 8px;
 }
 
-/* all range styles */
-input[type="range"] {
-  -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
-  width: 100%; /* Specific width is required for Firefox. */
-  background: transparent; /* Otherwise white in Chrome */
-}
-
-input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-}
-
-input[type="range"]:focus {
-  outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
-}
-
-input[type="range"]::-ms-track {
-  width: 100%;
-  cursor: pointer;
-
-  /* Hides the slider so custom styles can be added */
-  background: transparent;
-  border-color: transparent;
-  color: transparent;
-}
-
-/* thumb styles */
-
-input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  height: 12px;
-  width: 12px;
+.Player__Slider {
+  --slide-backgroud-color: #535353;
+  --seek-before-width: 0px;
+  --seek-before-color: #b3b3b3;
+  --knob-color: white;
+  appearance: none;
+  background: var(--slide-backgroud-color);
   border-radius: 99px;
-  background: #ffffff;
-  cursor: pointer;
-  margin-top: -4px; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
-}
-
-/* All the same stuff for Firefox */
-input[type="range"]::-moz-range-thumb {
-  height: 12px;
-  width: 12px;
-  border-radius: 99px;
-  background: #ffffff;
-  cursor: pointer;
-}
-
-/* All the same stuff for IE */
-input[type="range"]::-ms-thumb {
-  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-  border: 1px solid #000000;
-  height: 12px;
-  width: 12px;
-  border-radius: 99px;
-  background: #ffffff;
-  cursor: pointer;
-}
-
-/* slider styles */
-
-input[type="range"]::-webkit-progress-value {
-  background: yellow;
-}
-
-input[type="range"]::-moz-range-progress {
-  background: yellow;
-}
-
-input[type="range"]::-webkit-slider-runnable-track {
+  position: relative;
   width: 100%;
   height: 4px;
-  cursor: pointer;
-  background: #535353;
+  outline: none;
+}
+
+.Player__Slider--volume {
+  --seek-before-width: 26px;
+  max-width: 95px;
+}
+
+.Player__Slider:hover::before {
+  background-color: #ff6628;
+}
+
+.Player__Slider::-webkit-slider-runnable-track {
+  background: var(--slide-backgroud-color);
   border-radius: 99px;
-}
-
-input[type="range"]:focus::-webkit-slider-runnable-track {
-  background: #535353;
-}
-
-input[type="range"]::-moz-range-track {
+  position: relative;
   width: 100%;
   height: 4px;
-  cursor: pointer;
-  background: #535353;
-  border-radius: 99px;
+  outline: none;
 }
 
-input[type="range"]::-ms-track {
+.Player__Slider::-moz-range-track {
+  background: var(--slide-backgroud-color);
+  border-radius: 99px;
+  position: relative;
   width: 100%;
-  height: 99px;
-  cursor: pointer;
-  background: transparent;
-  border-color: transparent;
-  color: transparent;
+  height: 4px;
+  outline: none;
 }
-input[type="range"]::-ms-fill-lower {
-  background: #535353;
-  border-radius: 99px;
-}
-input[type="range"]:focus::-ms-fill-lower {
-  background: #535353;
-}
-input[type="range"]::-ms-fill-upper {
-  background: #535353;
 
-  border-radius: 99px;
+.Player__Slider::-moz-focus-outer {
+  border: 0;
 }
-input[type="range"]:focus::-ms-fill-upper {
-  background: #535353;
+
+.Player__Slider::before {
+  content: "";
+  top: 0;
+  left: 0;
+  bottom: 0;
+  border-top-left-radius: 99px;
+  border-bottom-left-radius: 99px;
+  position: absolute;
+  z-index: 1;
+  cursor: pointer;
+  background-color: var(--seek-before-color);
+  width: var(--seek-before-width);
+  height: 4px;
+}
+
+.Player__Slider::-moz-progress-bar {
+  border-top-left-radius: 99px;
+  border-bottom-left-radius: 99px;
+  background-color: var(--seek-before-color);
+  height: 4px;
+}
+
+.Player__Slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 12px;
+  width: 12px;
+  border-radius: 99px;
+  border: none;
+  background: var(--knob-color);
+  position: relative;
+  margin-top: -4px;
+  z-index: 3;
+  box-sizing: border-box;
+}
+
+.Player__Slider::-moz-range-thumb {
+  height: 12px;
+  width: 12px;
+  border-radius: 99px;
+  border: transparent;
+  background: var(--knob-color);
+  position: relative;
+  z-index: 3;
+  box-sizing: border-box;
 }

@@ -28,6 +28,30 @@ export const playlistSlice = createSlice({
     setTrackToPlay: (state, action: PayloadAction<Track>) => {
       state.selectedTrack = action.payload;
     },
+    playPrevTrack: (state) => {
+      for (let i = 0; i < state.allTracks.length; i++) {
+        if (state.allTracks[i].id === state.selectedTrack.id) {
+          if (state.allTracks[i - 1]) {
+            state.selectedTrack = state.allTracks[i - 1];
+          } else {
+            state.selectedTrack = state.allTracks[state.allTracks.length - 1];
+          }
+          return;
+        }
+      }
+    },
+    playNextTrack: (state) => {
+      for (let i = 0; i < state.allTracks.length; i++) {
+        if (state.allTracks[i].id === state.selectedTrack.id) {
+          if (state.allTracks[i + 1]) {
+            state.selectedTrack = state.allTracks[i + 1];
+          } else {
+            state.selectedTrack = state.allTracks[0];
+          }
+          return;
+        }
+      }
+    },
     // addTrack: (state, action: PayloadAction<Track>) => {
     //   state.allTracks.push(action.payload);
     // },
@@ -45,7 +69,7 @@ export const playlistSlice = createSlice({
   extraReducers: {},
 });
 
-export const { setTrackToPlay } = playlistSlice.actions;
+export const { setTrackToPlay, playPrevTrack, playNextTrack } = playlistSlice.actions;
 
 // export const selectAllPlaylists = (state: RootState) => state.playlist.allPlaylists;
 export const selectAllTracks = (state: RootState) => state.playlist.allTracks;

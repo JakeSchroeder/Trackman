@@ -52,6 +52,7 @@ export function useAudioPlayer(audioRef: any, audioProgressRef: any, audioVolume
   function changeAudioVolume() {
     if (audioRef.current && audioVolumeRef.current) {
       audioRef.current.volume = audioVolumeRef.current.value;
+      audioVolumeRef.current.style.setProperty("--seek-before-width", `${audioVolumeRef.current.value * 1000}%`);
     }
   }
 

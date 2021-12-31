@@ -3,7 +3,10 @@ export type Track = {
   title: string;
   artwork: string;
   artists: string[];
+  album: string;
+  duration: string;
   path: string;
+  dateAdded: string;
 };
 
 export type Playlist = {
