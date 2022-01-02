@@ -1,10 +1,13 @@
 import "./Playlist.css";
 import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonItem, IonList, IonText, IonTitle, IonToolbar } from "@ionic/react";
 import { useAppDispatch, useAppSelector } from "../../redux/app/hooks";
-import { selectAllTracks, selectSelectedTrack, setTrackToPlay } from "../../redux/playlist/playlistSlice";
+import { addTracks, selectAllTracks, selectSelectedTrack, setTrackToPlay } from "../../redux/playlist/playlistSlice";
 import { Track } from "../../redux/playlist/types";
 import { cloudUploadOutline, ellipsisHorizontal, ellipsisVertical, personCircle, search, timeOutline } from "ionicons/icons";
-import { useRef } from "react";
+import { ChangeEvent, ChangeEventHandler, useRef } from "react";
+import * as mmb from "music-metadata-browser";
+import { IPicture } from "music-metadata-browser";
+import { nanoid } from "@reduxjs/toolkit";
 
 interface PlaylistProps {}
 const Playlist: React.FC<PlaylistProps> = () => {
@@ -16,6 +19,50 @@ const Playlist: React.FC<PlaylistProps> = () => {
 
   function playSong(track: Track) {
     dispatch(setTrackToPlay(track));
+  }
+
+  async function onFileUpload(event: ChangeEvent<HTMLInputElement>) {
+    let parsedUploads: Array<mmb.IAudioMetadata> = [];
+    if ((event.target as HTMLInputElement).files) {
+      const files = (event.target as HTMLInputElement).files;
+      if (files && files.length) {
+        for (const file of Array.from(files)) {
+          let tempParsed: mmb.IAudioMetadata = await parseFile(file);
+          let cover = mmb.selectCover(tempParsed.common.picture);
+          let blob = new Blob([cover!.data], { type: "image/jpeg" });
+          var imageUrl = URL.createObjectURL(blob);
+          console.log(imageUrl);
+          parsedUploads.push(tempParsed);
+        }
+      }
+    }
+
+    createTrackFromUploads(parsedUploads);
+  }
+
+  async function parseFile(file: File) {
+    return mmb.parseBlob(file).then((metadata: any) => {
+      console.log(`Completed parsing of ${file.name}:`, metadata);
+      // pick the cover image
+
+      return metadata;
+    });
+  }
+
+  function createTrackFromUploads(parsedUploads: Array<mmb.IAudioMetadata>) {
+    const tracks = parsedUploads.map((upload) => {
+      return {
+        id: nanoid(),
+        title: upload.common.title,
+        artists: upload.common.artists,
+        album: upload.common.album,
+        artwork: upload.common.picture,
+        duration: upload.format.duration,
+        dateAdded: Date.now().toString(),
+      } as Track;
+    });
+
+    // dispatch(addTracks(tracks));
   }
 
   return (
@@ -38,7 +85,7 @@ const Playlist: React.FC<PlaylistProps> = () => {
               }}
             >
               <IonIcon className="Toolbar__icon" slot="icon-only" icon={cloudUploadOutline} />
-              <input ref={fileInputRef} type="file" accept=".mp3,audio/*" hidden></input>
+              <input ref={fileInputRef} type="file" accept=".mp3" hidden onChange={onFileUpload} multiple></input>
             </IonButton>
           </IonButtons>
           <IonButtons slot="primary">
@@ -79,7 +126,7 @@ const Playlist: React.FC<PlaylistProps> = () => {
                     <div className="Playlist__track">
                       <span className="Playlist__title">{track.title}</span>
                       <span className="Playlist__artist">
-                        {track.artists.map((artist) => {
+                        {track.artists?.map((artist) => {
                           return `${artist}`;
                         })}
                       </span>

@@ -1,14 +1,12 @@
 import { IonButton, IonIcon } from "@ionic/react";
-import { pauseSharp, playSharp, playSkipBackSharp, playSkipForwardSharp, volumeMediumOutline } from "ionicons/icons";
+import { options, pauseSharp, playSharp, playSkipBackSharp, playSkipForwardSharp, volumeMediumOutline } from "ionicons/icons";
 import { useEffect, useRef } from "react";
 import { useAudioPlayer } from "./hooks/useAudioPlayer";
 import { calculateTime } from "../../utils/calculateTime";
 import "./Player.css";
 import { useAppDispatch, useAppSelector } from "../../redux/app/hooks";
 import { playNextTrack, playPrevTrack, selectSelectedTrack } from "../../redux/playlist/playlistSlice";
-const MP3Tag = require("mp3tag.js");
-
-console.log(MP3Tag);
+import * as mm from "music-metadata-browser";
 
 interface PlayerProps {
   // id: string | undefined;
