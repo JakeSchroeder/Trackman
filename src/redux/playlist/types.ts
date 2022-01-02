@@ -4,9 +4,9 @@ export type Track = {
   artwork?: string;
   artists?: string[];
   album?: string;
-  duration?: string;
+  duration?: number;
   path?: string;
-  dateAdded: string;
+  dateAdded: number;
 };
 
 export type Playlist = {

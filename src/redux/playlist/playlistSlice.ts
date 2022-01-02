@@ -5,11 +5,11 @@ import { Playlist, Track } from "./types";
 
 export interface PlaylistState {
   allTracks: Track[];
-  selectedTrack: Track;
+  selectedTrack: Track | undefined;
 }
 
 const initialState: PlaylistState = {
-  allTracks: trackList, //static data for now will be fetched
+  allTracks: [], //static data for now will be fetched
   // allPlaylists: [
   //   {
   //     id: nanoid(),
@@ -18,7 +18,7 @@ const initialState: PlaylistState = {
   //     artworkPath: "./assets/images/album-cover.jpg",
   //   } as Playlist,
   // ],
-  selectedTrack: trackList[0],
+  selectedTrack: undefined,
 };
 
 export const playlistSlice = createSlice({
@@ -30,7 +30,7 @@ export const playlistSlice = createSlice({
     },
     playPrevTrack: (state) => {
       for (let i = 0; i < state.allTracks.length; i++) {
-        if (state.allTracks[i].id === state.selectedTrack.id) {
+        if (state.allTracks[i].id === state.selectedTrack?.id) {
           if (state.allTracks[i - 1]) {
             state.selectedTrack = state.allTracks[i - 1];
           } else {
@@ -42,7 +42,7 @@ export const playlistSlice = createSlice({
     },
     playNextTrack: (state) => {
       for (let i = 0; i < state.allTracks.length; i++) {
-        if (state.allTracks[i].id === state.selectedTrack.id) {
+        if (state.allTracks[i].id === state.selectedTrack?.id) {
           if (state.allTracks[i + 1]) {
             state.selectedTrack = state.allTracks[i + 1];
           } else {
@@ -54,6 +54,9 @@ export const playlistSlice = createSlice({
     },
     addTracks: (state, action: PayloadAction<Track[]>) => {
       state.allTracks = [...state.allTracks, ...action.payload];
+      if (!state.selectedTrack) {
+        state.selectedTrack = state.allTracks[0];
+      }
     },
     // addTrack: (state, action: PayloadAction<Track>) => {
     //   state.allTracks.push(action.payload);

@@ -3,11 +3,17 @@ import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonItem, IonList
 import { useAppDispatch, useAppSelector } from "../../redux/app/hooks";
 import { addTracks, selectAllTracks, selectSelectedTrack, setTrackToPlay } from "../../redux/playlist/playlistSlice";
 import { Track } from "../../redux/playlist/types";
-import { cloudUploadOutline, ellipsisHorizontal, ellipsisVertical, personCircle, search, timeOutline } from "ionicons/icons";
+import { cloudUploadOutline, ellipsisHorizontal, ellipsisVertical, image, personCircle, search, timeOutline } from "ionicons/icons";
 import { ChangeEvent, ChangeEventHandler, useRef } from "react";
 import * as mmb from "music-metadata-browser";
-import { IPicture } from "music-metadata-browser";
+import { IPicture, IAudioMetadata } from "music-metadata-browser";
 import { nanoid } from "@reduxjs/toolkit";
+import { calculateTime } from "../../utils/calculateTime";
+
+interface IUpload {
+  metadata: IAudioMetadata;
+  file: File;
+}
 
 interface PlaylistProps {}
 const Playlist: React.FC<PlaylistProps> = () => {
@@ -22,17 +28,17 @@ const Playlist: React.FC<PlaylistProps> = () => {
   }
 
   async function onFileUpload(event: ChangeEvent<HTMLInputElement>) {
-    let parsedUploads: Array<mmb.IAudioMetadata> = [];
+    let parsedUploads: IUpload[] = [];
     if ((event.target as HTMLInputElement).files) {
       const files = (event.target as HTMLInputElement).files;
       if (files && files.length) {
         for (const file of Array.from(files)) {
-          let tempParsed: mmb.IAudioMetadata = await parseFile(file);
-          let cover = mmb.selectCover(tempParsed.common.picture);
-          let blob = new Blob([cover!.data], { type: "image/jpeg" });
-          var imageUrl = URL.createObjectURL(blob);
-          console.log(imageUrl);
-          parsedUploads.push(tempParsed);
+          let tempMetadata: mmb.IAudioMetadata = await parseFile(file);
+
+          parsedUploads.push({
+            file: file,
+            metadata: tempMetadata,
+          });
         }
       }
     }
@@ -42,27 +48,33 @@ const Playlist: React.FC<PlaylistProps> = () => {
 
   async function parseFile(file: File) {
     return mmb.parseBlob(file).then((metadata: any) => {
-      console.log(`Completed parsing of ${file.name}:`, metadata);
-      // pick the cover image
-
       return metadata;
     });
   }
 
-  function createTrackFromUploads(parsedUploads: Array<mmb.IAudioMetadata>) {
+  function createTrackFromUploads(parsedUploads: IUpload[]) {
     const tracks = parsedUploads.map((upload) => {
+      let cover = mmb.selectCover(upload.metadata.common.picture);
+      let imageUrl;
+      let trackUrl;
+      if (cover && cover.data) {
+        let blob = new Blob([cover.data], { type: "image/jpeg" });
+        imageUrl = URL.createObjectURL(blob);
+        trackUrl = URL.createObjectURL(upload.file);
+      }
       return {
         id: nanoid(),
-        title: upload.common.title,
-        artists: upload.common.artists,
-        album: upload.common.album,
-        artwork: upload.common.picture,
-        duration: upload.format.duration,
-        dateAdded: Date.now().toString(),
+        title: upload.metadata.common.title,
+        artists: upload.metadata.common.artists,
+        album: upload.metadata.common.album,
+        artwork: imageUrl,
+        duration: upload.metadata.format.duration,
+        path: trackUrl,
+        dateAdded: Date.now(),
       } as Track;
     });
 
-    // dispatch(addTracks(tracks));
+    dispatch(addTracks(tracks));
   }
 
   return (
@@ -94,9 +106,6 @@ const Playlist: React.FC<PlaylistProps> = () => {
             </IonButton>
           </IonButtons>
         </IonToolbar>
-        {/* <IonText color="light">
-          <h1>All Songs</h1>
-        </IonText> */}
       </IonHeader>
       <div className="Playlist__inner">
         <IonContent className="Playlist__content">
@@ -118,28 +127,36 @@ const Playlist: React.FC<PlaylistProps> = () => {
                   playSong(track);
                 }}
               >
-                <div className={`Playlist__item Playlist__columns ${track.id === selectedTrack.id ? `Playlist__item--selected` : ``}`}>
+                <div className={`Playlist__item Playlist__columns ${track.id === selectedTrack?.id ? `Playlist__item--selected` : ``}`}>
                   <IonText color="light">
                     <span className="Playlist__number">{index + 1}</span>
                   </IonText>
                   <IonText color="light">
-                    <div className="Playlist__track">
-                      <span className="Playlist__title">{track.title}</span>
-                      <span className="Playlist__artist">
-                        {track.artists?.map((artist) => {
-                          return `${artist}`;
-                        })}
-                      </span>
+                    <div className="Playlist_artwrap">
+                      {track.artwork!.length > 1 ? (
+                        <img className="Artwork__image" src={track.artwork} />
+                      ) : (
+                        <div className="Artwork__fallback"></div>
+                      )}
+                      {/* <div className="Artwork__fallback"></div> */}
+                      <div className="Playlist__track">
+                        <span className="Playlist__title">{track.title}</span>
+                        <span className="Playlist__artist">
+                          {track.artists?.map((artist) => {
+                            return `${artist}`;
+                          })}
+                        </span>
+                      </div>
                     </div>
                   </IonText>
                   <IonText color="light">
                     <span className="Playlist__album">{track.album}</span>
                   </IonText>
                   <IonText color="light">
-                    <span className="Playlist__date">{track.dateAdded}</span>
+                    <span className="Playlist__date">{new Date(track.dateAdded).toLocaleDateString("en-US")}</span>
                   </IonText>
                   <IonText color="light">
-                    <span className="Playlist__duration">{track.duration}</span>
+                    <span className="Playlist__duration">{calculateTime(track.duration!)}</span>
                   </IonText>
                 </div>
               </IonItem>

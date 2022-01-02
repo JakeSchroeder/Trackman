@@ -45,21 +45,22 @@ const Player: React.FC<PlayerProps> = () => {
   return (
     <div className="Player__wrapper">
       <div className="Player__left">
-        {selectedSong.artwork ? (
+        {selectedSong?.artwork ? (
           <img className="Song__artwork" width={56} height={56} src={selectedSong.artwork} alt="song's album artwork" />
         ) : (
           <div style={{ width: "56px", height: "56px", background: "gray" }}></div>
         )}
         <div className="Song__info">
-          <span className="Song__title">{selectedSong.title}</span>
+          <span className="Song__title">{selectedSong?.title ?? ""}</span>
           <span className="Song__artists">
-            {selectedSong.artists ? selectedSong.artists.map((artist: string) => <span key={`artist--${artist}`}>{artist}</span>) : ""}
+            {selectedSong?.artists ? selectedSong?.artists.map((artist: string) => <span key={`artist--${artist}`}>{artist}</span>) : ""}
           </span>
         </div>
       </div>
       <div className="Player__center">
         <div className="Player__controls">
           <IonButton
+            disabled={!selectedSong}
             className="Player__back"
             fill="clear"
             onClick={() => {
@@ -69,6 +70,7 @@ const Player: React.FC<PlayerProps> = () => {
             <IonIcon slot="icon-only" icon={playSkipBackSharp} />
           </IonButton>
           <IonButton
+            disabled={!selectedSong}
             className="Player__toggle"
             color="light"
             shape="round"
@@ -83,6 +85,7 @@ const Player: React.FC<PlayerProps> = () => {
             )}
           </IonButton>
           <IonButton
+            disabled={!selectedSong}
             className="Player__forward"
             fill="clear"
             onClick={() => {
@@ -124,7 +127,7 @@ const Player: React.FC<PlayerProps> = () => {
       </div>
       <audio
         ref={audioRef}
-        src={selectedSong.path}
+        src={selectedSong?.path}
         onLoadedMetadata={onLoadedMetadata}
         onEnded={() => {
           dispatch(playNextTrack());

@@ -15,6 +15,24 @@
   --padding-end: 0;
 }
 
+.Playlist_artwrap {
+  display: flex;
+  align-items: center;
+}
+
+.Artwork__image {
+  height: 40px;
+  width: 40px;
+  margin-right: 12px;
+}
+
+.Artwork__fallback {
+  height: 40px;
+  width: 40px;
+  background: #535355;
+  margin-right: 12px;
+}
+
 .Playlist__header {
   color: white;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -50,8 +68,12 @@
   height: 56px;
 }
 
+.Playlist__item:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
 .Playlist__item--selected {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.15);
 }
 
 .Playlist__number {
