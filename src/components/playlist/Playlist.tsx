@@ -3,12 +3,22 @@ import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonItem, IonList
 import { useAppDispatch, useAppSelector } from "../../redux/app/hooks";
 import { addTracks, selectAllTracks, selectSelectedTrack, setTrackToPlay } from "../../redux/playlist/playlistSlice";
 import { Track } from "../../redux/playlist/types";
-import { cloudUploadOutline, ellipsisHorizontal, ellipsisVertical, image, personCircle, search, timeOutline } from "ionicons/icons";
-import { ChangeEvent, ChangeEventHandler, useRef } from "react";
+import {
+  cloudUploadOutline,
+  ellipsisHorizontal,
+  ellipsisVertical,
+  pauseSharp,
+  playSharp,
+  radioOutline,
+  search,
+  timeOutline,
+} from "ionicons/icons";
+import { ChangeEvent, ChangeEventHandler, useRef, useState } from "react";
 import * as mmb from "music-metadata-browser";
-import { IPicture, IAudioMetadata } from "music-metadata-browser";
+import { IAudioMetadata } from "music-metadata-browser";
 import { nanoid } from "@reduxjs/toolkit";
 import { calculateTime } from "../../utils/calculateTime";
+import { selectIsPlaying, setIsPlaying } from "../../redux/player/playerSlice";
 
 interface IUpload {
   metadata: IAudioMetadata;
@@ -19,13 +29,10 @@ interface PlaylistProps {}
 const Playlist: React.FC<PlaylistProps> = () => {
   const allTracks = useAppSelector(selectAllTracks);
   const selectedTrack = useAppSelector(selectSelectedTrack);
-  const dispatch = useAppDispatch();
-
+  const isPlaying = useAppSelector(selectIsPlaying);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  function playSong(track: Track) {
-    dispatch(setTrackToPlay(track));
-  }
+  const [hoveredTrack, setHoveredTrack] = useState<Track>();
+  const dispatch = useAppDispatch();
 
   async function onFileUpload(event: ChangeEvent<HTMLInputElement>) {
     let parsedUploads: IUpload[] = [];
@@ -62,6 +69,7 @@ const Playlist: React.FC<PlaylistProps> = () => {
         imageUrl = URL.createObjectURL(blob);
         trackUrl = URL.createObjectURL(upload.file);
       }
+
       return {
         id: nanoid(),
         title: upload.metadata.common.title,
@@ -73,7 +81,6 @@ const Playlist: React.FC<PlaylistProps> = () => {
         dateAdded: Date.now(),
       } as Track;
     });
-
     dispatch(addTracks(tracks));
   }
 
@@ -90,7 +97,7 @@ const Playlist: React.FC<PlaylistProps> = () => {
             </IonButton>
             <IonButton
               className="Toolbar__button"
-              onClick={() => {
+              onClick={(e) => {
                 if (fileInputRef.current) {
                   fileInputRef.current.click();
                 }
@@ -120,16 +127,69 @@ const Playlist: React.FC<PlaylistProps> = () => {
           </div>
           <IonList className="Playlist__list">
             {allTracks.map((track, index) => (
-              <IonItem
-                className="Playlist__itemwrap"
-                key={`${track.id}__${track.title}`}
-                onClick={() => {
-                  playSong(track);
-                }}
-              >
-                <div className={`Playlist__item Playlist__columns ${track.id === selectedTrack?.id ? `Playlist__item--selected` : ``}`}>
+              <IonItem className={`Playlist__itemwrap`} key={`${track.id}__${track.title}`}>
+                <div
+                  className={`Playlist__item ${track.id === selectedTrack?.id ? `Playlist__item--selected` : ``} Playlist__columns`}
+                  onDoubleClick={() => {
+                    dispatch(setTrackToPlay(track));
+                  }}
+                  onMouseEnter={() => {
+                    setHoveredTrack(track);
+                  }}
+                  onMouseLeave={() => {
+                    setHoveredTrack(undefined);
+                  }}
+                >
                   <IonText color="light">
-                    <span className="Playlist__number">{index + 1}</span>
+                    <span className="Playlist__number">
+                      {hoveredTrack ? (
+                        <>
+                          {hoveredTrack.id === track.id ? (
+                            <>
+                              {selectedTrack && selectedTrack.id === hoveredTrack.id && isPlaying ? (
+                                <IonIcon
+                                  className="Player__IconLG"
+                                  slot="icon-only"
+                                  icon={pauseSharp}
+                                  onClick={() => {
+                                    dispatch(setIsPlaying(false));
+                                  }}
+                                />
+                              ) : (
+                                <IonIcon
+                                  slot="icon-only"
+                                  icon={playSharp}
+                                  onClick={() => {
+                                    if (selectedTrack && selectedTrack.id === track.id) {
+                                      dispatch(setIsPlaying(true));
+                                    } else {
+                                      dispatch(setTrackToPlay(track));
+                                      dispatch(setIsPlaying(true));
+                                    }
+                                  }}
+                                />
+                              )}
+                            </>
+                          ) : (
+                            <>
+                              {isPlaying && selectedTrack && selectedTrack.id === track.id ? (
+                                <IonIcon slot="icon-only" icon={radioOutline} />
+                              ) : (
+                                <>{index + 1}</>
+                              )}
+                            </>
+                          )}
+                        </>
+                      ) : (
+                        <>
+                          {isPlaying && selectedTrack && selectedTrack.id === track.id ? (
+                            <IonIcon slot="icon-only" icon={radioOutline} />
+                          ) : (
+                            <>{index + 1}</>
+                          )}
+                        </>
+                      )}
+                    </span>
                   </IonText>
                   <IonText color="light">
                     <div className="Playlist_artwrap">
@@ -138,7 +198,6 @@ const Playlist: React.FC<PlaylistProps> = () => {
                       ) : (
                         <div className="Artwork__fallback"></div>
                       )}
-                      {/* <div className="Artwork__fallback"></div> */}
                       <div className="Playlist__track">
                         <span className="Playlist__title">{track.title}</span>
                         <span className="Playlist__artist">

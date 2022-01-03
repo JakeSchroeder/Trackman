@@ -1,6 +1,6 @@
 import { IonButton, IonIcon } from "@ionic/react";
-import { options, pauseSharp, playSharp, playSkipBackSharp, playSkipForwardSharp, volumeMediumOutline } from "ionicons/icons";
-import { useEffect, useRef } from "react";
+import { options, pause, pauseSharp, playSharp, playSkipBackSharp, playSkipForwardSharp, volumeMediumOutline } from "ionicons/icons";
+import { useCallback, useEffect, useRef } from "react";
 import { useAudioPlayer } from "./hooks/useAudioPlayer";
 import { calculateTime } from "../../utils/calculateTime";
 import "./Player.css";
@@ -20,8 +20,8 @@ const Player: React.FC<PlayerProps> = () => {
   const audioRef = useRef<any>(null);
   const audioProgressRef = useRef<any>(null);
   const audioVolumeRef = useRef<any>(null);
-  const dispatch = useAppDispatch();
   const selectedSong = useAppSelector(selectSelectedTrack);
+  const dispatch = useAppDispatch();
 
   const {
     changeAudioToPlayHead,
@@ -33,14 +33,32 @@ const Player: React.FC<PlayerProps> = () => {
     changeAudioVolume,
     setIsPlaying,
     play,
+    pause,
   } = useAudioPlayer(audioRef, audioProgressRef, audioVolumeRef);
 
   useEffect(() => {
     if (isPlaying) {
       play();
       setIsPlaying(true);
+    } else {
+      pause();
+      setIsPlaying(false);
     }
   }, [onLoadedMetadata, isPlaying]);
+
+  useEffect(() => {
+    window.addEventListener("keypress", togglePlaybackSpacebar);
+    return () => {
+      window.removeEventListener("keypress", togglePlaybackSpacebar);
+    };
+  }, [togglePlaying]);
+
+  function togglePlaybackSpacebar(event: KeyboardEvent) {
+    const { key, keyCode } = event;
+    if ((keyCode === 32 || key === " ") && selectedSong) {
+      togglePlaying();
+    }
+  }
 
   return (
     <div className="Player__wrapper">
@@ -79,9 +97,9 @@ const Player: React.FC<PlayerProps> = () => {
             }}
           >
             {isPlaying ? (
-              <IonIcon className="Player__IconLG" slot="icon-only" icon={pauseSharp} />
+              <IonIcon className="Player__Icon Player__Icon--pause " slot="icon-only" icon={pauseSharp} />
             ) : (
-              <IonIcon slot="icon-only" icon={playSharp} />
+              <IonIcon className="Player__Icon" slot="icon-only" icon={playSharp} />
             )}
           </IonButton>
           <IonButton

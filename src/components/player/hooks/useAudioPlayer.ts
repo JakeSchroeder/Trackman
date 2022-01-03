@@ -1,10 +1,13 @@
 import { useRef, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../../redux/app/hooks";
+import { selectIsPlaying, setIsPlaying } from "../../../redux/player/playerSlice";
 
 export function useAudioPlayer(audioRef: any, audioProgressRef: any, audioVolumeRef: any) {
-  const [isPlaying, setIsPlaying] = useState(false);
-
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
+
+  const isPlaying = useAppSelector(selectIsPlaying);
+  const dispatch = useAppDispatch();
 
   const animationRef = useRef<number>();
 
@@ -63,7 +66,8 @@ export function useAudioPlayer(audioRef: any, audioProgressRef: any, audioVolume
 
   function togglePlaying() {
     const prevState = isPlaying;
-    setIsPlaying(!prevState);
+    dispatch(setIsPlaying(!prevState));
+
     if (!prevState) {
       play();
     } else {
@@ -78,6 +82,7 @@ export function useAudioPlayer(audioRef: any, audioProgressRef: any, audioVolume
     isPlaying,
     setIsPlaying,
     play,
+    pause,
     onLoadedMetadata,
     togglePlaying,
     changeAudioVolume,

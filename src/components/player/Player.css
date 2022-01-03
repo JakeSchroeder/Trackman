@@ -112,6 +112,15 @@ ion-icon {
   align-items: center;
 }
 
+.Player__Icon {
+  width: 16px;
+  height: 16px;
+}
+
+.Player__Icon--pause {
+  width: 18px;
+}
+
 .Volume__icon {
   font-size: 20px;
   margin-right: 8px;
