@@ -19,7 +19,7 @@ import { IAudioMetadata } from "music-metadata-browser";
 import { nanoid } from "@reduxjs/toolkit";
 import { calculateTime } from "../../utils/calculateTime";
 import { selectIsPlaying, setIsPlaying } from "../../redux/player/playerSlice";
-
+import animated_src from "../../assets/images/animated-radio.gif";
 interface IUpload {
   metadata: IAudioMetadata;
   file: File;
@@ -173,6 +173,7 @@ const Playlist: React.FC<PlaylistProps> = () => {
                           ) : (
                             <>
                               {isPlaying && selectedTrack && selectedTrack.id === track.id ? (
+                                // <img src={animated_src} />
                                 <IonIcon slot="icon-only" icon={radioOutline} />
                               ) : (
                                 <>{index + 1}</>
@@ -185,6 +186,7 @@ const Playlist: React.FC<PlaylistProps> = () => {
                           {isPlaying && selectedTrack && selectedTrack.id === track.id ? (
                             <IonIcon slot="icon-only" icon={radioOutline} />
                           ) : (
+                            // <img src={animated_src} />
                             <>{index + 1}</>
                           )}
                         </>

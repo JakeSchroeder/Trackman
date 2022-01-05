@@ -55,22 +55,41 @@ import { useAppSelector } from "./redux/app/hooks";
 // import { selectAllPlaylists } from "./redux/playlist/playlistSlice";
 import { Track } from "./redux/playlist/types";
 import Playlist from "./components/playlist/Playlist";
+import Login from "./pages/auth/Login";
 
 setupIonicReact();
 
 const App: React.FC = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   return (
     <IonApp>
-      <div className="App__wrapper">
-        <div className="App__inner">
-          <div className="App__main">
-            <Playlist />
-          </div>
-        </div>
-        <div className="App__player">
-          <Player />
-        </div>
-      </div>
+      <IonReactRouter>
+        <IonRouterOutlet>
+          <Route
+            path="/"
+            render={() => {
+              return isLoggedIn ? (
+                <div className="App__wrapper">
+                  <div className="App__inner">
+                    <div className="App__main">
+                      <Playlist />
+                    </div>
+                  </div>
+                  <div className="App__player">
+                    <Player />
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <Redirect to={"/login"} />
+                  <Route path="/login" exact component={Login} />
+                </>
+              );
+            }}
+          />
+        </IonRouterOutlet>
+      </IonReactRouter>
     </IonApp>
   );
 };

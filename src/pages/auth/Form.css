@@ -1,0 +1,49 @@
+.Input__form {
+  margin-top: 16px;
+}
+
+.Input__group {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.Input__group--submit {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16px;
+}
+
+.Input__group--remember {
+  flex-direction: row;
+  align-items: center;
+}
+
+.Input__text {
+  width: 100%;
+  height: 72px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+  margin: 8px 0;
+  font-size: 14px;
+}
+.Input__label {
+  font-size: 14px;
+  color: gray;
+}
+
+.Input__label--forgot {
+  margin-top: 16px !important;
+}
+
+.Input__checkbox {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin-right: 12px;
+}
+.Input__submit {
+  width: 240px;
+  color: white;
+  height: 40px;
+  text-transform: none;
+}
