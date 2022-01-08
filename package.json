@@ -2,7 +2,7 @@
   "name": "zart",
   "private": true,
   "version": "0.0.1",
-  "author": "KATT",
+  "author": "Jake Schroeder",
   "license": "MIT",
   "scripts": {
     "db-up": "docker compose up -d",
