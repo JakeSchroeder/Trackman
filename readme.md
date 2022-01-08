@@ -1,8 +1,8 @@
 # Trackman
 
-## Audio/Music App WIP
+## Premium Audio/Music Cloud Storage Solution... For now.
 
-`For Web, Mobile, and Desktop`
+`Supporting Web, Mobile, and Desktop`
 
 Contributors:
 
