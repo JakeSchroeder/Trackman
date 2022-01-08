@@ -4,6 +4,8 @@
 
 `Supporting Web, Mobile, and Desktop`
 
+Mainly comparing the Ionic Framework vs React Native
+
 Contributors:
 
 <table>
