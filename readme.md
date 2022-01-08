@@ -1,34 +1,8 @@
 # Trackman
 
-## Premium Cloud Audio Storage With A Next-Gen UX... For now...
+## Audio/Music App WIP
 
 `For Web, Mobile, and Desktop`
-
-### Frontend (Client)
-
-- Ionic (React)
-- Capacitor
-- Electron
-- Typescript
-
-### Backend (Server)
-
-- Express
-- Node
-- TRPC
-- Typescript
-
-### Database
-
-- MySQL
-
-### Infastructure
-
-- Vercel
-- PlanetScale
-- S3
-
----
 
 Contributors:
 
@@ -40,13 +14,3 @@ Contributors:
     </td>
   </tr>
 </table>
-
-## TODOs
-
-- [ ] User accounts
-- [ ] Drag & Drop Upload
-- [ ] Cloud Storage
-- [x] Playback
-- [ ] Playlists
-- [ ] Search by Artists, songs, etc
-- [ ] Local file support

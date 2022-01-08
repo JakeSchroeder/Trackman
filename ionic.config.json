@@ -1,8 +1,0 @@
-{
-  "name": "trackman.app",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "react",
-  "id": "350d4023"
-}
